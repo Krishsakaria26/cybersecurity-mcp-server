@@ -1,20 +1,23 @@
-const { buildMcpContext } = require("../services/mcp.service");
+const {
+  buildMcpContext,
+  getMcpMetadata
+} = require("../services/mcp.service");
 
 /**
- * Controller: Handles HTTP layer only
+ * MCP Context Controller
  */
 const getMcpContext = (req, res) => {
   try {
-    const context = buildMcpContext();
-
     return res.status(200).json({
+      mcp: getMcpMetadata(),
       success: true,
-      context
+      context: buildMcpContext()
     });
   } catch (err) {
     return res.status(500).json({
+      mcp: getMcpMetadata(),
       success: false,
-      message: "Failed to retrieve MCP context"
+      message: "Failed to build MCP context"
     });
   }
 };

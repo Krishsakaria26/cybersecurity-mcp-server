@@ -1,25 +1,33 @@
 /**
- * Service: Core MCP context logic
- * This is where SECURITY decisions live
+ * MCP Context Service
+ * Versioned, controlled context exposure
  */
+
+const MCP_SPEC_VERSION = "mcp/1.0";
+const CONTEXT_VERSION = "2026-02-01";
+
 const buildMcpContext = () => {
-  /**
-   * Mock MCP context (SAFE)
-   * No secrets, no system data
-   */
   return {
     project: "cybersecurity-mcp-server",
     capabilities: [
       "controlled-context-exposure",
-      "security-first-architecture",
-      "rate-limiting-ready",
-      "auth-ready"
+      "api-key-auth",
+      "rate-limiting",
+      "audit-logging",
+      "production-hardening"
     ],
-    version: "1.0.0",
-    timestamp: new Date().toISOString()
+    environment: process.env.NODE_ENV || "development"
+  };
+};
+
+const getMcpMetadata = () => {
+  return {
+    spec: MCP_SPEC_VERSION,
+    context_version: CONTEXT_VERSION
   };
 };
 
 module.exports = {
-  buildMcpContext
+  buildMcpContext,
+  getMcpMetadata
 };
