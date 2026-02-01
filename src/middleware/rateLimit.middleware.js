@@ -1,18 +1,31 @@
 const rateLimit = require("express-rate-limit");
+const { auditLog } = require("../utils/logger");
 
 /**
  * Rate limiter for MCP routes
- * Example policy:
- *  - 60 requests per 1 minute per IP
+ * Logs abuse attempts for audit and incident response
  */
 const mcpRateLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 60, // limit each IP to 60 requests per window
-  standardHeaders: true, // return rate limit info in headers
-  legacyHeaders: false,  // disable X-RateLimit-* headers
-  message: {
-    success: false,
-    message: "Too many requests, please try again later"
+  windowMs: 1 * 60 * 1000, // 1 minute window
+  max: 60, // max requests per IP per window
+  standardHeaders: true, // include RateLimit-* headers
+  legacyHeaders: false,
+
+  /**
+   * Custom handler so we can log rate-limit violations
+   */
+  handler: (req, res) => {
+    auditLog({
+      event: "RATE_LIMIT_EXCEEDED",
+      method: req.method,
+      route: req.originalUrl,
+      ip: req.ip
+    });
+
+    return res.status(429).json({
+      success: false,
+      message: "Too many requests, please try again later"
+    });
   }
 });
 
