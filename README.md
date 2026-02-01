@@ -55,9 +55,11 @@ Notes:
 
 ## 🧑‍💻 Local Development
 
-Get started quickly for development and debugging:
+Below are platform-specific steps so contributors on Linux/macOS and Windows can get started quickly.
 
-1. Clone and install dependencies
+### Linux / macOS
+
+1. Clone and install:
 
 ```bash
 git clone https://github.com/Krishsakaria26/cybersecurity-mcp-server.git
@@ -67,14 +69,18 @@ npm install
 
 2. Create a `.env` file (optional but recommended)
 
-Create `.env` in project root or use `.env.example` (if present). Typical variables:
+```bash
+# copy example if present
+cp .env.example .env || true
 
-```
+# or create manually
+cat > .env <<EOF
 PORT=3000
 NODE_ENV=development
 RATE_LIMIT_WINDOW_MS=60000
 RATE_LIMIT_MAX=100
 LOG_LEVEL=debug
+EOF
 ```
 
 3. Start in development mode (auto-reloads on change)
@@ -92,13 +98,62 @@ npm start
 Tips:
 - Use your IDE debugger attached to `src/server.js` for breakpoints.
 - Add tests (Jest/Mocha) and a `test` npm script before merging features.
-- Run linters and formatters as a pre-commit hook for consistency.
+- Use `pre-commit` hooks for linting/formatting consistency.
+
+---
+
+### Windows (PowerShell / CMD / WSL)
+
+> For the closest parity with Linux/macOS behavior, use WSL or Git Bash. PowerShell and CMD work, but some shell behaviors differ (path separators, quoting).
+
+1. Clone and install (PowerShell / CMD):
+
+```powershell
+git clone https://github.com/Krishsakaria26/cybersecurity-mcp-server.git
+cd cybersecurity-mcp-server
+npm install
+```
+
+2. Create a `.env` file (PowerShell / CMD)
+
+- PowerShell:
+
+```powershell
+New-Item -Path . -Name '.env' -ItemType 'file' -Force
+Add-Content -Path .env -Value 'PORT=3000'
+Add-Content -Path .env -Value 'NODE_ENV=development'
+Add-Content -Path .env -Value 'RATE_LIMIT_WINDOW_MS=60000'
+Add-Content -Path .env -Value 'RATE_LIMIT_MAX=100'
+Add-Content -Path .env -Value 'LOG_LEVEL=debug'
+```
+
+- CMD:
+
+```cmd
+echo PORT=3000> .env
+echo NODE_ENV=development>> .env
+echo RATE_LIMIT_WINDOW_MS=60000>> .env
+echo RATE_LIMIT_MAX=100>> .env
+echo LOG_LEVEL=debug>> .env
+```
+
+3. Start in development mode
+
+```powershell
+npm run dev
+```
+
+Notes for Windows:
+- If using Windows Defender / Firewall you'll be prompted when the server listens on a port—allow local access.
+- If you need POSIX tools or to match Linux behavior (e.g., volume mounts in Docker), prefer using WSL or Git Bash.
 
 ---
 
 ## 🐳 Docker Deployment
 
-This repo includes a `Dockerfile` so you can run the app in a container. Example commands below show building, running, and running with an env-file and persistent logs.
+Docker commands differ slightly across shells; below are examples for both platforms and tips for Windows users.
+
+### Linux / macOS
 
 Build the image:
 
@@ -106,19 +161,50 @@ Build the image:
 docker build -t mcp-server:latest .
 ```
 
-Run the container (basic):
+Run (basic):
 
 ```bash
 docker run -p 3000:3000 --rm --name mcp-server mcp-server:latest
 ```
 
-Run the container with an env file and persistent logs:
+Run with env-file and persistent logs:
 
 ```bash
 docker run -p 3000:3000 --env-file .env -v "$(pwd)/logs:/app/logs" --restart unless-stopped --name mcp-server mcp-server:latest
 ```
 
-Optional: Docker Compose (example `docker-compose.yml`):
+### Windows (PowerShell / Docker Desktop)
+
+Build the image (same):
+
+```powershell
+docker build -t mcp-server:latest .
+```
+
+Run (basic):
+
+```powershell
+docker run -p 3000:3000 --rm --name mcp-server mcp-server:latest
+```
+
+Run with env-file and persistent logs (PowerShell):
+
+```powershell
+docker run -p 3000:3000 --env-file .\.env -v "${PWD}\logs:/app/logs" --restart unless-stopped --name mcp-server mcp-server:latest
+```
+
+If `${PWD}` path doesn't mount correctly, provide the full Windows path for the volume mapping (replace `C:\path\to\repo`):
+
+```powershell
+docker run -p 3000:3000 --env-file .\.env -v "C:\full\path\to\repo\logs:/app/logs" --restart unless-stopped --name mcp-server mcp-server:latest
+```
+
+Notes & recommendations:
+- On Windows prefer Docker Desktop with WSL2 integration enabled for better compatibility.
+- Use full absolute paths for volume mounts if relative mounts fail in PowerShell/CMD.
+- When running containers in production, pass secrets via your orchestrator or Docker secrets (avoid committing `.env`).
+
+Optional: Docker Compose (works cross-platform if file paths are adjusted):
 
 ```yaml
 version: '3.8'
@@ -135,9 +221,9 @@ services:
 ```
 
 Health & deployment notes:
-- Provide sensible resource limits and environment secrets via your orchestrator (Kubernetes/Swarm).
+- Provide resource limits and environment secrets via your orchestrator (Kubernetes/Swarm).
 - Mount `logs/` for host access or forward logs to a log aggregator for production.
-- Add a container healthcheck if your orchestration platform requires it.
+- Consider adding a container healthcheck for orchestrators that rely on it.
 
 ---
 
@@ -151,17 +237,7 @@ Environment settings are loaded from `src/config/env.js`. Common variables:
 
 > Tip: Create a `.env` file in the project root for local development.
 
-## 🧩 Configuration
-
-Environment settings are loaded from `src/config/env.js`. Common variables:
-
-- `PORT` - server port (default: 3000)
-- `NODE_ENV` - environment (`development`/`production`)
-- Rate limit options in `src/config/security.js` (window, max requests)
-
-> Tip: Create a `.env` file in the project root for local development.
-
-## 🧭 Logging
+##  Logging
 
 The app uses `winston` with `winston-daily-rotate-file` for rotated logs stored in the `logs/` folder. Logs include structured timestamps and levels for easier parsing and aggregation.
 
