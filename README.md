@@ -181,11 +181,11 @@ MIT — see the `LICENSE` file.
 
 ## 👤 Author
 
-Krish Sakaria
+Krish Sakaria :
 Cybersecurity & Backend Engineering
 
-Manish Shah 
+Manish Shah :
 Backend Engineering
 
-Madhusmita Choudhary
+Madhusmita Choudhary :
 Fullstack Engineering
