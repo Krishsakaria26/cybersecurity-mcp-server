@@ -26,7 +26,8 @@
   "homepage": "https://github.com/Krishsakaria26/cybersecurity-mcp-server#readme",
   "dependencies": {
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
