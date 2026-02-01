@@ -1,0 +1,34 @@
+{
+  "name": "cybersecurity-mcp-server",
+  "version": "1.0.0",
+  "description": "Security-first MCP (Model Context Protocol) backend",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Krishsakaria26/cybersecurity-mcp-server.git"
+  },
+  "keywords": [
+    "mcp",
+    "cybersecurity",
+    "nodejs",
+    "express",
+    "backend-security"
+  ],
+  "author": "Krish Sakaria",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Krishsakaria26/cybersecurity-mcp-server/issues"
+  },
+  "homepage": "https://github.com/Krishsakaria26/cybersecurity-mcp-server#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
