@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const { getMcpContext } = require("../controllers/mcp.controller");
+const { authenticateApiKey } = require("../middleware/auth.middleware");
 
 /**
  * GET /mcp/context
- * Returns controlled MCP context
+ * Protected MCP endpoint
  */
-router.get("/context", getMcpContext);
+router.get("/context", authenticateApiKey, getMcpContext);
 
 module.exports = router;
