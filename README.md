@@ -265,3 +265,7 @@ Backend Engineering
 
 Madhusmita Choudhary :
 Fullstack Engineering
+
+Aryan Karna :
+Frontend Developer 
+
