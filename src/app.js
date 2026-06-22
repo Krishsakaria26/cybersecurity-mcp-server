@@ -2,7 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 
-const mcpRoutes = require("./routes/mcp.routes");
+const mcpRoutes = require("./api/routes/mcp.routes");
 
 const app = express();
 
