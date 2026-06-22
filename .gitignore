@@ -2,4 +2,8 @@
 .env.*
 logs/
 logs/
+*.log
+*.log.*
 node_modules/
+dist/
+build/  
